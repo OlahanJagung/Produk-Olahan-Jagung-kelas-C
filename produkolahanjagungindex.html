@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OURCASAVA - Olahan Singkong</title>
+  <style>
+    /* ANIMASI MANFAAT */
+@keyframes fadeSlideUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.benefit-list li {
+  opacity: 0;
+  animation: fadeSlideUp 0.6s ease forwards;
+  animation-delay: calc(0.2s * var(--i));
+  transform: translateY(20px);
+}
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+
+    /* ANIMASI OPENING */
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .animate-header { animation: fadeInUp 1s ease forwards; }
+    .animate-banner { animation: fadeIn 1.2s ease forwards; }
+    .animate-products { animation: fadeInUp 1.4s ease forwards; }
+    .animate-tentang { animation: fadeInUp 1.6s ease forwards; }
+
+    /* ANIMASI KLIK PRODUK */
+    @keyframes clickFlash {
+      0% { box-shadow: 0 0 0px #ff7b00; transform: scale(1); }
+      50% { box-shadow: 0 0 20px #ff7b00; transform: scale(1.05); }
+      100% { box-shadow: 0 0 0px #ff7b00; transform: scale(1); }
+    }
+    .product-card.clicked {
+      animation: clickFlash 0.4s ease;
+    }
+
+    /* NAVBAR */
+    header { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: #fff; border-bottom: 2px solid #e6e6e6; }
+    .logo { font-weight: 700; font-size: 22px; color: #ff7b00; }
+    nav a { margin: 0 15px; text-decoration: none; color: #333; font-weight: 500; }
+    nav a:hover { color: #ff7b00; }
+    #cart-btn { background: #ff7b00; color: white; padding: 6px 15px; border-radius: 5px; cursor: pointer; border: none; }
+    #cart-count { background: white; color: #ff7b00; padding: 2px 6px; border-radius: 5px; margin-left: 5px; }
+
+    /* BANNER */
+    .banner-image { position: relative; width: 100%; height: 360px; overflow: hidden; }
+    .banner-image img { width: 100%; height: 360px; object-fit: cover; filter: brightness(80%); }
+    .banner-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; }
+    .banner-text h1 { font-size: 35px; font-weight: 700; }
+    .banner-text p { font-size: 18px; }
+
+    /* PRODUK */
+    .products { padding: 40px 50px; text-align: center; background: #fafafa; }
+    .product-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+    .product-card { width: 220px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background: white; transition: .3s; }
+    .product-card:hover { transform: scale(1.05); }
+    .product-card img { width: 100%; border-radius: 6px; }
+    .buy-btn { background: #ff7b00; border: none; color: white; padding: 8px 15px; cursor: pointer; border-radius: 5px; margin-top: 10px; }
+
+    /* HARGA */
+    .price-original { text-decoration: line-through; color: #777; font-size: 14px; }
+    .price-discount { font-weight: bold; font-size: 18px; color: #d95300; }
+
+    /* CART POPUP */
+    #cart-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); width: 350px; background: white; padding: 20px; border-radius: 10px; border: 2px solid #ff7b00; transition: .3s; z-index: 999; }
+    #cart-popup.active { transform: translate(-50%, -50%) scale(1); }
+    .cart-item { display: flex; justify-content: space-between; margin: 8px 0; }
+    .cart-item button { background: red; color: white; border: none; padding: 3px 6px; cursor: pointer; border-radius: 4px; }
+    #checkout-btn { width: 100%; padding: 10px; background: #ff7b00; color: white; border: none; cursor: pointer; margin-top: 10px; border-radius: 6px; }
+
+    /* TENTANG */
+    #tentang { padding: 40px 50px; text-align: center; background: #fff3e0; }
+    #tentang button { background: #25D366; color: white; padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+
+    /* FOOTER */
+    footer { text-align: center; padding: 15px; background: #333; color: white; margin-top: 40px; }
+  </style>
+</head>
+<body>
+
+<header class="animate-header">
+  <div class="logo">CORNYLICIOUS</div>
+  <nav>
+    <a href="#">Beranda</a>
+    <a href="#produk">Produk</a>
+    <a href="#Diskon">Diskon</a>
+    <a href="#tentang">Tentang</a>
+    <a href="#">Kontak</a>
+  </nav>
+  <button id="cart-btn">Keranjang <span id="cart-count">0</span></button>
+</header>
+
+<section class="banner-image animate-banner">
+   <img src="https://i.imgur.com/4Os9enR.jpeg" alt="Banner Singkong">
+  <div class="banner-text">
+    <h1>Koleksi Olahan Jagung Pilihan</h1>
+    <p>Gunakan kode: <b>CornGroupOne</b> untuk mendapatkan diskon 10-20%</p>
+  </div>
+</section>
+
+<section class="products animate-products" id="produk">
+  <h2>Produk Kami</h2><br>
+  <div class="product-container">
+
+    <div class="product-card" data-price="14000">
+      <img src="https://i.imgur.com/JuC86CJ.jpeg">
+      <h3>Jagung Cheese Tarik</h3>
+      <p style="margin-top:8px; font-size:14px; color:#555;">
+        Jagung manis yang dipadukan dengan lelehan keju mozzarella, menghasilkan sensasi gurih dan lumer di mulut. Cocok dinikmati saat santai atau kumpul bareng teman!
+      </p>
+      <span class="price-discount">Rp 15.000</span><br>
+      <span class="price-original">Rp 25.000</span>
+      <a href="https://www.instagram.com/putra.zhay.372?igsh=ZTgzYmRpYm56bm4=" target="_blank">
+        <button class="buy-btn">Beli</button>
+      </a>
+    </div>
+
+    <div class="product-card" data-price="12000">
+      <img src="https://i.imgur.com/eSjFELS.jpeg">
+      <h3>Corn Ribs</h3>
+      <p style="margin-top:8px; font-size:14px; color:#555;">
+        Potongan jagung berbentuk iga yang dipanggang dengan bumbu spesial. Renyah di luar, juicy di dalam. Rasakan kelezatan jagung dengan gaya baru!
+      </p>
+      <span class="price-discount">Rp 12.000</span><br>
+      <span class="price-original">Rp 15.000</span>
+      <a href="https://www.instagram.com/putra.zhay.372?igsh=ZTgzYmRpYm56bm4=" target="_blank">
+        <button class="buy-btn">Beli</button> 
+      </a> 
+    </div>    
+
+    <div class="product-card" data-price="10000">
+      <img src="https://i.imgur.com/jdBNLpE.jpeg">
+      <h3>Sweet Popcorn</h3>
+      <p style="margin-top:8px; font-size:14px; color:#555;">
+        Popcorn klasik dengan sentuhan rasa manis yang pas. Cocok untuk teman nonton, ngemil sore, atau oleh-oleh ringan yang bikin nagih.
+      </p>
+      <span class="price-discount">Rp 10.000</span><br>
+      <span class="price-original">Rp 14.000</span>
+      <a href="https://www.instagram.com/putra.zhay.372?igsh=ZTgzYmRpYm56bm4=" target="_blank">
+        <button class="buy-btn">Beli</button>
+      </a>
+    </div>
+
+    <div class="product-card" data-price="18000">
+      <img src="https://i.imgur.com/FP5ATtI.jpeg" alt="Jasuke">
+      <h3>Jasuke</h3>
+      <p style="margin-top:8px; font-size:14px; color:#555;">
+        Jagung susu keju legendaris! Perpaduan jagung kukus, susu kental manis, dan taburan keju parut yang creamy dan bikin hangat suasana.
+      </p>
+      <span class="price-discount">Rp 18.000</span><br>
+      <span class="price-original">Rp 20.000</span>
+      <a href="https://www.instagram.com/putra.zhay.372?igsh=ZTgzYmRpYm56bm4=" target="_blank">
+        <button class="buy-btn">Beli</button>
+      </a>
+    </div>
+  </div>
+</section>
+<section id="Diskon">
+<div style="margin:20px; text-align:center;">
+  <label for="voucher">Masukkan Kode Voucher:</label><br>
+  <input type="text" id="voucher" placeholder="Contoh: CornGroupOne" style="padding:6px; margin-top:8px; border:1px solid #ccc; border-radius:5px;">
+  <button onclick="applyVoucher()" style="background:#ff7b00; color:white; border:none; padding:6px 12px; border-radius:5px; cursor:pointer;">Aktifkan</button>
+</div>
+<script>
+function applyVoucher() {
+  const code = document.getElementById("voucher").value.trim();
+  const products = document.querySelectorAll(".product-card");
+
+  if (code === "CornGroupOne") {
+    products.forEach(card => {
+      let originalPrice = parseInt(card.getAttribute("data-price")); 
+      let discountPercent = Math.floor(Math.random() * (20 - 10 + 1)) + 10; // diskon acak 10-20%
+      let newPrice = originalPrice - (originalPrice * discountPercent / 100);
+
+      // Update tampilan harga
+      let priceElement = card.querySelector(".price-discount");
+      priceElement.textContent = "Rp " + newPrice.toLocaleString("id-ID");
+      
+      // Tambahkan info diskon
+      let info = card.querySelector(".voucher-info");
+      if (!info) {
+        info = document.createElement("p");
+        info.className = "voucher-info";
+        info.style.color = "#28a745";
+        info.style.fontSize = "13px";
+        card.appendChild(info);
+      }
+      info.textContent = "Diskon " + discountPercent + "% dengan kode voucher!";
+    });
+
+    alert("Kode voucher berhasil diterapkan 🎉");
+  } else {
+    alert("Kode voucher tidak valid ❌");
+  }
+}
+</script>
+</body>
+<!-- 🎡 Lucky Spin -->
+<section style="text-align:center; margin:40px;">
+  <h2>🎡 Lucky Spin Promo</h2>
+  <p>Coba keberuntunganmu! Klik spin untuk hadiah menarik.</p>
+  
+  <div id="wheel" style="width:250px; height:250px; border:10px solid #ff7b00; border-radius:50%; margin:20px auto; position:relative; transition:transform 4s ease-out;">
+    <!-- Bagian hadiah -->
+    <div style="position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#333;">
+      🎁
+    </div>
+  </div>
+  
+  <button onclick="spinWheel()" style="background:#ff7b00; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer;">Putar!</button>
+  
+  <p id="result" style="margin-top:20px; font-size:18px; font-weight:bold; color:#d95300;"></p>
+</section>
+
+<script>
+function spinWheel() {
+  const wheel = document.getElementById("wheel");
+  const result = document.getElementById("result");
+
+  // Daftar hadiah
+  const prizes = ["Diskon 15%", "Gratis Ongkir", "Zonk 😅", "Diskon 20%", "Diskon 10%"];
+  
+  // Putar acak
+  const randomDegree = Math.floor(Math.random() * 360) + 720; // minimal 2 putaran
+  wheel.style.transform = `rotate(${randomDegree}deg)`;
+
+  // Tentukan hasil setelah animasi selesai
+  setTimeout(() => {
+    const index = Math.floor(Math.random() * prizes.length);
+    const prize = prizes[index];
+    result.textContent = "Kamu dapat: " + prize;
+
+    // Efek ke produk (contoh: diskon otomatis)
+    if (prize.includes("Diskon")) {
+      const discount = parseInt(prize.replace(/\D/g,'')); // ambil angka diskon
+      const products = document.querySelectorAll(".product-card");
+      products.forEach(card => {
+        let originalPrice = parseInt(card.getAttribute("data-price"));
+        let newPrice = originalPrice - (originalPrice * discount / 100);
+        card.querySelector(".price-discount").textContent = "Rp " + newPrice.toLocaleString("id-ID");
+      });
+    }
+    if (prize === "Gratis Ongkir") {
+      alert("Selamat! Ongkir gratis akan diterapkan saat checkout 🚚");
+    }
+  }, 4000); // sesuai durasi animasi
+}
+</script>
+<section id="tentang">
+  <h3 style="margin-top: 30px; color: #d95300;">Kenapa Memilih Produk Kami?</h3><br>
+  <ul class="benefit-list" style="text-align: left; max-width: 700px; margin: 0 auto; font-size: 15px; color: #444; line-height: 1.6;">
+  <li style="--i:1"><b>🌽 Bahan Berkualitas:</b> Kami hanya menggunakan jagung manis segar dari petani lokal, tanpa pengawet.</li>
+  <li style="--i:2"><b>🍴 Rasa Unik & Inovatif:</b> Setiap produk kami hadir dengan cita rasa khas yang menggugah selera dan cocok untuk semua kalangan.</li>
+  <li style="--i:3"><b>💰 Harga Terjangkau:</b> Nikmati camilan premium dengan harga ramah di kantong, cocok untuk semua momen.</li>
+  <li style="--i:4"><b>🎁 Cocok untuk Oleh-oleh:</b> Kemasan praktis dan menarik, pas untuk hadiah atau buah tangan.</li>
+  <li style="--i:5"><b>💬 Layanan Ramah:</b> Kami siap melayani dengan sepenuh hati melalui WhatsApp dan Instagram.</li>
+</ul>
+  <h2>Tentang Kami</h2><br>
+  <p>KELOMPOK 1_KELAS C</p>
+  <ol style="text-align:left; max-width:700px; margin:0 auto; font-size:15px; color:#444; line-height:1.6;">
+    <li>Putra Damai Anugrah Zai – 2510631200019</li>
+    <li>Diska Aulia Anggraini – 2510631200018</li>
+    <li>Falih Adinugroho – 2510631200064</li>
+    <li>Mufid Tammam Ar'rafi – 2510631200118</li>
+    <li>Firman Maulana – 2510631200065</li>
+    <li>Kurottun Najwa Erawan – 2510631200115</li>
+    <li>Fahma Ardelia – 2510631200063</li>
+    <li>Husein Ibnu Akhmad – 2510631200069</li>
+  </ol><br>
+<!-- Alamat UNSIKA -->
+  <address style="margin-top:20px; font-size:15px; color:#555; line-height:1.6;">
+    📍 Universitas Singaperbangsa Karawang (UNSIKA)<br>
+    Jl. HS. Ronggowaluyo, Telukjambe Timur,<br>
+    Karawang, Jawa Barat 41361, Indonesia
+  </address><br>
+
+  <button onclick="window.open('https://wa.me/6285812456378','_blank')">Chat WhatsApp: 0858-1245-6378</button>
+</section>
